@@ -1,22 +1,11 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>自分の展</title><style>
-*{box-sizing:border-box}body{margin:0;background:#f7f4ee;color:#222;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
-a{text-decoration:none;color:inherit}button,input,textarea{font:inherit}.top{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid #ddd;background:#f7f4ee}
-.brand{font:19px Georgia,serif}.tiny{font-size:10px;letter-spacing:1.8px;color:#888}.wrap{max-width:740px;margin:auto;padding:30px 20px 95px}
-h1{font:34px/1.3 Georgia,serif}.muted{font-size:13px;line-height:1.7;color:#777}.feature,.panel,.card{background:#fff;border:1px solid #e3ded6;border-radius:14px;overflow:hidden}
-.cover{height:270px;background:#eee9df;display:flex;align-items:center;justify-content:center;font-size:88px}.pad{padding:20px}.enter,.primary{display:block;width:100%;text-align:center;border:0;background:#222;color:#fff;padding:14px;border-radius:25px;margin-top:15px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{padding:17px}.section{font:24px Georgia,serif;margin:38px 0 14px}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:70px;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;align-items:center}.bottom a{text-align:center;font-size:11px;color:#666}.bottom b{display:block;font-size:19px;margin-bottom:3px}.plus{background:#222!important;color:#fff!important;width:45px;height:45px;border-radius:50%;font-size:25px!important;display:flex;align-items:center;justify-content:center}
-.back{font-size:29px}.art{min-height:350px;background:#fff;border:1px solid #ddd;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;position:relative}
-.emoji{font-size:90px}.caption{font:21px/1.6 Georgia,serif;margin-top:20px}.num{position:absolute;right:15px;bottom:14px;font-size:11px;color:#999}.controls{display:flex;justify-content:space-between;align-items:center;margin:18px 0}.pill{border:1px solid #ddd;background:#fff;border-radius:22px;padding:10px 16px}
-.comments{background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px}.form{display:flex;gap:7px}.form input{flex:1;min-width:0;border:1px solid #ddd;border-radius:20px;padding:10px}.send{border:0;background:#222;color:#fff;border-radius:20px;padding:9px 14px}
-.field{width:100%;border:1px solid #ddd;background:#fff;border-radius:10px;padding:13px;margin:7px 0 15px}.label{font-size:12px;color:#666}.upload{display:block;border:1.5px dashed #aaa;background:#fffaf2;text-align:center;padding:26px;border-radius:13px;margin-top:10px}.work{background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px;margin-top:12px}
-@media(max-width:520px){.grid{grid-template-columns:1fr}h1{font-size:30px}.cover{height:240px}}
-</style></head>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>自分の展</title><link rel="stylesheet" href="styles.css"></head>
 <body><header class="top"><span class="tiny">THE SOCIAL EXHIBITION</span><span class="brand">みんなの〇〇展</span><span class="tiny">2026</span></header>
-<main class="wrap"><h1>自分の展</h1><div id="mine"><p class="muted">まだ公開した展覧会はありません。</p></div></main><nav class="bottom">
+<main class="wrap">
+<div class="tiny">MY EXHIBITION ROOM</div><h1>自分の展示室</h1><p class="muted">あなたがひらいた展覧会を、ここに。</p><div id="message" role="alert" class="message" hidden></div><a class="enter" href="create.html" id="create-link">新しい展覧会をつくる</a><div id="legacy" class="notice" hidden></div><div id="mine" class="exhibition-list"></div>
+</main><nav class="bottom">
 <a href="index.html"><b>⌂</b>入口</a>
 <a href="search.html"><b>⌕</b>探す</a>
-<a class="plus" href="create.html">＋</a>
+<a class="plus" href="create.html" aria-label="展覧会をつくる">＋</a>
 <a href="records.html"><b>🎟</b>来場記録</a>
 <a href="profile.html"><b>▢</b>自分の展</a>
-</nav><script>var t=localStorage.getItem('myExTitle'),c=localStorage.getItem('myExCount');if(t){document.getElementById('mine').innerHTML='<div class="card"><div class="tiny">MY EXHIBITION</div><h3></h3><span class="muted">'+c+'作品 ・ 公開済み</span></div>';document.querySelector('#mine h3').textContent=t}</script></body></html>
+</nav><script src="storage.js"></script><script src="app.js"></script></body></html>
