@@ -2,6 +2,22 @@
 
 既存の6つのHTML画面を使う、ブラウザー内で完結する展覧会アプリです。
 
+## Supabase接続の準備
+
+接続基盤を追加しました。登録・ログイン・プロフィール・展示のクラウド同期はまだ未実装で、既存のローカル展示は引き続き利用できます。
+
+- GitHubのリポジトリ設定 → Secrets and variables → Actions → New repository secret で `SUPABASE_URL` と `SUPABASE_PUBLISHABLE_KEY` をそれぞれ登録します。
+- URLはSupabaseのProject URL、キーは `sb_publishable_` で始まるPublishable keyだけを使用します。Secret key・service_role・DBパスワードは入力しません。
+- `.github/workflows/pages.yml` が設定を環境変数で受け取り、`node scripts/build-site.cjs` で `_site/supabase-config.json` を生成します。値をソースやログへ直接書きません。未設定や誤ったキーではビルドを中止します。
+- 両方の設定が完了してから、GitHubのSettings → Pages → Sourceを **GitHub Actions** に切り替え、Actions → Deploy static site → Run workflowを実行します。それまでは既存の公開方式を維持します。
+- 公開後の `connection.html` で「接続を確認する」を押すと、Supabase Authの設定APIへの接続を検証します。展示や個人情報のアップロード、DB変更は行いません。この確認はDBの権限設定やクラウド同期の動作確認ではありません。
+- Publishable keyとProject URLは、生成された公開ファイルから閲覧できます。GitHub Secretsは値をリポジトリ履歴に残さないための保管先であり、ブラウザーへの秘密保持を保証するものではありません。テーブル・StorageのRLS設定後にアカウント機能を接続します。
+- Supabase JS SDK 2.57.4を `vendor/` にライセンスとともに同梱し、外部CDNに依存せず読み込みます。
+
+ローカルで接続確認する場合は、`.env.example` を `.env.local` にコピーして公開用の2項目だけを入力し、Node.js 22で `node --env-file=.env.local scripts/build-site.cjs` を実行します。`_site/` を静的サーバーで配信してください。`.env*`、生成設定、`_site/` はGit管理対象外です。
+
+検証：`node --test tests/*.test.cjs`（既存保存処理と、秘密キー拒否・公開ファイルの範囲・設定不備時の出力保持）。
+
 ## 起動
 
 フォルダーを静的HTTPサーバーで配信して `index.html` を開きます。例：Pythonがある環境では `python3 -m http.server 8000 --bind 127.0.0.1` を実行し、`http://127.0.0.1:8000` へアクセスします。HTMLの直接起動（file://）では、ブラウザーによって画面間のlocalStorage共有が保証されません。

@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+supabase-config.json
+_site/
+node_modules/
+*.bundle
+.DS_Store
