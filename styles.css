@@ -44,6 +44,8 @@ textarea{resize:vertical}
 .comments{margin-top:24px}.comments .description{border-bottom:1px solid #eee;padding-bottom:12px}
 .exhibition-label{margin-top:28px}.exhibition-list{display:grid;gap:16px;margin-top:28px}
 .exhibition-card{display:block}.exhibition-card h3{line-height:1.6}.card-enter{font-size:13px}
+.exhibition-card .media{height:180px;object-fit:cover;border-radius:8px;margin-bottom:18px}
+.card-description{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:#777;font-size:13px}
 .ticket{border-left:3px dashed #b8a78c}.empty{padding:25px 0}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:520px){.editor-actions{flex-direction:column;align-items:stretch}.actions .primary{flex:auto;width:100%}.work{padding:16px}.art{padding:14px 14px 36px}.top .tiny:last-child{display:none}.wrap{padding-left:16px;padding-right:16px}}

@@ -28,8 +28,16 @@
   function card(ex, data) {
     const link = element('a', 'card exhibition-card');
     link.href = href(ex);
+    const cover = ex.works.find(work => work.media)?.media;
+    if (cover?.kind === 'image') {
+      const image = mediaNode(cover, ex.title);
+      if (image) { image.loading = 'lazy'; link.append(image); }
+    } else if (cover?.kind === 'video') {
+      link.append(element('p', 'muted', '▶ 動画のある展覧会'));
+    }
     link.append(element('div', 'tiny', ex.sample ? 'SAMPLE EXHIBITION' : 'MY EXHIBITION'),
       element('h3', '', ex.title), element('p', 'muted', ex.works.length + '作品 ・ ' + (ex.sample ? ex.visitors : (data.visits[ex.id] ? 1 : 0)) + ' 来場'), element('span', 'card-enter', '入場する →'));
+    if (ex.description) link.querySelector('h3').after(element('p', 'description card-description', ex.description));
     return link;
   }
   function mediaNode(media, title) {
@@ -214,7 +222,7 @@
       try {
         S.publish(draft);
         dirty = false;
-        location.href = 'profile.html';
+        location.href = 'profile.html?published=' + encodeURIComponent(draft.id);
       } catch (error) { message(error.message); }
     };
     window.addEventListener('beforeunload', event => {
@@ -238,7 +246,11 @@
     if (preview) { $('back-link').href = 'create.html'; $('back-link').textContent = '← 編集に戻る'; }
     else if (ex && !ex.sample) { $('back-link').href = 'profile.html'; $('back-link').textContent = '← 自分の展示室へ'; }
     if (!ex || !ex.works.length) { message('展覧会が見つかりません。展示室から入場するか、作品を追加してください。'); return; }
-    let p = 0;
+    function roomIndex() {
+      const match = /^#room=(\d+)$/.exec(location.hash);
+      return match ? Math.max(0, Math.min(ex.works.length - 1, Number(match[1]) - 1)) : 0;
+    }
+    let p = roomIndex();
     let previewReactions = {};
     if (!preview) {
       try {
@@ -294,8 +306,13 @@
         message(); renderReactions(); return true;
       } catch (error) { message(error.message); return false; }
     }
-    $('prev').onclick = () => { if (p > 0) { p--; render(); } };
-    $('next').onclick = () => { if (p < ex.works.length - 1) { p++; render(); } };
+    function goToRoom(index) {
+      if (index < 0 || index >= ex.works.length) return;
+      location.hash = 'room=' + (index + 1);
+    }
+    window.addEventListener('hashchange', () => { p = roomIndex(); render(); });
+    $('prev').onclick = () => goToRoom(p - 1);
+    $('next').onclick = () => goToRoom(p + 1);
     $('like').onclick = () => changeReaction(item => { item.liked = !item.liked; });
     $('comment-form').onsubmit = event => {
       event.preventDefault();
@@ -311,6 +328,10 @@
     if (page === 'create.html') create(data);
     else if (page === 'exhibition.html') exhibition(data);
     else if (page === 'profile.html') {
+      const published = new URLSearchParams(location.search).get('published');
+      if (data.exhibitions.some(ex => ex.id === published)) {
+        message('展覧会をこのブラウザーに公開しました。下のカードから入場できます。');
+      }
       $('create-link').textContent = data.draft ? '作成途中の展覧会を続ける' : '新しい展覧会をつくる';
       if (!data.exhibitions.length) $('mine').append(element('p', 'empty muted', 'まだ公開した展覧会はありません。最初の展覧会をひらいてみましょう。'));
       data.exhibitions.forEach(ex => $('mine').append(card(ex, data)));
